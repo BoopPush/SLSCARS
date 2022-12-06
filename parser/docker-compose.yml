@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:  
+  db:
+    container_name: mssql_db
+    image: mcr.microsoft.com/mssql/server:latest
+    user: root
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=${ACCEPT_EULA}
+      - SA_PASSWORD=${SA_PASSWORD}
+    volumes:
+      - ./db:/var/opt/mssql/data
