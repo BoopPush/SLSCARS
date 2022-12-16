@@ -1,9 +1,11 @@
 #!/usr/bin/env python3.11
 from cars import get_car_data
+from utils import save_car_data
 
 
 def main():
     car_data = get_car_data()
+    save_car_data()
 
 
 if __name__ == '__main__':

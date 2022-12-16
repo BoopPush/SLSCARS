@@ -3,7 +3,7 @@ import time
 
 from bs4 import BeautifulSoup
 
-from utils import _get_session
+from connection import _get_session
 
 
 def get_car_data():
