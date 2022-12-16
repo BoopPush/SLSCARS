@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SlSCarsServerStub.Common;
 using SlSCarsServerStub.Models;
 using System.Runtime.Serialization.Json;
 
@@ -6,9 +7,10 @@ namespace SlSCarsServerStub.Controllers
 {
     [Route("cars")]
     [ApiController]
-    public class TestController : ControllerBase
+    public class CarController : ControllerBase
     {
         [HttpGet("all")]
+        [TypeFilter(typeof(LogFilterAsync), IsReusable = true)]
         public async Task<IActionResult> GetAllCars()
         {
             var stream = new MemoryStream();
@@ -20,6 +22,7 @@ namespace SlSCarsServerStub.Controllers
         }
 
         [HttpGet("{vin}")]
+        [TypeFilter(typeof(LogFilterAsync), IsReusable = true)]
         public async Task<IActionResult> GetCar(string vin)
         {
             var stream = new MemoryStream();
