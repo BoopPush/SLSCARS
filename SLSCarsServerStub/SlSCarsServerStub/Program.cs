@@ -30,5 +30,6 @@ namespace SlSCarsServerStub
                 });
                 webBuilder.UseStartup<Startup>();
             });
+        
     }
 }

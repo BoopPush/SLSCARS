@@ -9,16 +9,20 @@ namespace SlSCarsServerStub
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app)
         {
             app.UseRouting();
 
+            app.UseCors(builder => builder.AllowAnyOrigin());
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
         }
 
     }
