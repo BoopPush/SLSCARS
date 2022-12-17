@@ -1,4 +1,8 @@
-﻿namespace SlSCarsServerStub
+﻿using System;
+using System.Configuration;
+using System.Data.SqlClient;
+
+namespace SlSCarsServerStub
 {
     public class Startup
     {

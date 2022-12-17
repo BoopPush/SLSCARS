@@ -68,6 +68,7 @@ namespace SlSCarsServerStub.Models
                     Drive = DriveArr[rand_.Next(DriveArr.Length)],
                     Engine = EngineArr[rand_.Next(EngineArr.Length)],
                     Fuel = FuelArr[rand_.Next(FuelArr.Length)],
+                    Year = GenerateYear()
 
                 };
 
@@ -77,7 +78,7 @@ namespace SlSCarsServerStub.Models
             return storage;
         }
 
-        public static LotsStorage Generate(string vin)
+        public static LotsStorage GenerateByVIN(string vin)
         {
             var storage = new LotsStorage();
 
@@ -98,13 +99,81 @@ namespace SlSCarsServerStub.Models
                 Drive = DriveArr[rand_.Next(DriveArr.Length)],
                 Engine = EngineArr[rand_.Next(EngineArr.Length)],
                 Fuel = FuelArr[rand_.Next(FuelArr.Length)],
-
+                Year = GenerateYear()
             };
 
             storage.Lots.Add(lot);
 
             return storage;
         }
+
+        public static LotsStorage GenerateByBrand(string brand)
+        {
+            var storage = new LotsStorage();
+
+            for (int r = 0; r < 10; r++)
+            {
+                var lot = new LotData()
+                {
+                    Mileage = rand_.Next(1000000),
+                    Bid = rand_.NextDouble() * rand_.Next(100000),
+                    SaleDate = DateTime.Now,
+                    Auction = AuctionArr[rand_.Next(AuctionArr.Length)],
+                    Condition = ConditionArr[rand_.Next(ConditionArr.Length)],
+                    PrimaryDamage = DamageArr[rand_.Next(DamageArr.Length)],
+                    SecondaryDamage = DamageArr[rand_.Next(DamageArr.Length)],
+                    Color = ColorArr[rand_.Next(ColorArr.Length)],
+                    VIN = GenerateVIN(),
+                    Model = GetModelsByBrand(brand),
+                    Transmission = Transmission[rand_.Next(Transmission.Length)],
+                    Drive = DriveArr[rand_.Next(DriveArr.Length)],
+                    Engine = EngineArr[rand_.Next(EngineArr.Length)],
+                    Fuel = FuelArr[rand_.Next(FuelArr.Length)],
+                    Year = GenerateYear()
+                };
+
+                storage.Lots.Add(lot);
+            }
+
+            return storage;
+        }
+
+        public static LotsStorage GenerateByModel(string brand,string model)
+        {
+            var storage = new LotsStorage();
+
+            for (int r = 0; r < 5; r++)
+            {
+                var lot = new LotData()
+                {
+                    Mileage = rand_.Next(1000000),
+                    Bid = rand_.NextDouble() * rand_.Next(100000),
+                    SaleDate = DateTime.Now,
+                    Auction = AuctionArr[rand_.Next(AuctionArr.Length)],
+                    Condition = ConditionArr[rand_.Next(ConditionArr.Length)],
+                    PrimaryDamage = DamageArr[rand_.Next(DamageArr.Length)],
+                    SecondaryDamage = DamageArr[rand_.Next(DamageArr.Length)],
+                    Color = ColorArr[rand_.Next(ColorArr.Length)],
+                    VIN = GenerateVIN(),
+                    Model = brand + ' ' + model,
+                    Transmission = Transmission[rand_.Next(Transmission.Length)],
+                    Drive = DriveArr[rand_.Next(DriveArr.Length)],
+                    Engine = EngineArr[rand_.Next(EngineArr.Length)],
+                    Fuel = FuelArr[rand_.Next(FuelArr.Length)],
+                    Year = GenerateYear()
+                };
+
+                storage.Lots.Add(lot);
+            }
+
+            return storage;
+        }
+
+        private static int GenerateYear()
+        {
+            return rand_.Next(2000, 2021);
+        }
+
         private static string GenerateVIN()
         {
             StringBuilder vin = new StringBuilder();
@@ -135,6 +204,14 @@ namespace SlSCarsServerStub.Models
 
             return brand + ' ' + model;
         }
+
+        private static string GetModelsByBrand(string brand)
+        {
+            var model = ModelMap[brand][rand_.Next(3)];
+
+            return brand + ' ' + model;
+        }
+
     }
 
 
@@ -186,5 +263,22 @@ namespace SlSCarsServerStub.Models
 
         [DataMember(Name = "fuel")]
         public string Fuel;
+
+         [DataMember(Name = "imagesrc")]
+        public string Image = "https://bidfax.info/uploads/posts/2022-12/16/audi-a3-sedan-2018-wauj8gff5j1082723-img1.jpg";
+
+        [DataMember(Name = "year")]
+        public int Year;
+
+        [DataMember(Name = "docs")]
+        public string Docs = "Fl - Certificate Of Destruction";
+
+        [DataMember(Name = "location")]
+        public string Location = "Ca - Martinez";
+
+        [DataMember(Name = "seller")]
+        public string Seller = "Not specified";
+
+
     }
 }

@@ -5,13 +5,17 @@ using System.Runtime.Serialization.Json;
 
 namespace SlSCarsServerStub.Controllers
 {
-    [Route("cars")]
-    [ApiController]
-    public class CarController : ControllerBase
+    public class CarController : Controller
     {
-        [HttpGet("all")]
+
+        [HttpGet("cars")]
         [TypeFilter(typeof(LogFilterAsync), IsReusable = true)]
-        public async Task<IActionResult> GetAllCars()
+        public async Task<IActionResult> CarRoute(string vin, string brand,string model) => 
+            vin is null ? brand is null ? GetAllCars() : GetCarByBrand(brand,model) : GetCarByVIN(vin);
+
+
+        //TODO: return all cars from db
+        public IActionResult GetAllCars()
         {
             var stream = new MemoryStream();
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(LotsStorage));
@@ -21,16 +25,38 @@ namespace SlSCarsServerStub.Controllers
             return Ok(stream);
         }
 
-        [HttpGet("{vin}")]
-        [TypeFilter(typeof(LogFilterAsync), IsReusable = true)]
-        public async Task<IActionResult> GetCar(string vin)
+
+        //TODO: get car by vin in db
+        public IActionResult GetCarByVIN(string vin)
         {
             var stream = new MemoryStream();
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(LotsStorage));
-            LotsStorage storage = LotsStorage.Generate(vin);
+            LotsStorage storage = LotsStorage.GenerateByVIN(vin);
             serializer.WriteObject(stream, storage);
             stream.Position = 0;
             return Ok(stream);
         }
+
+
+
+        public IActionResult GetCarByBrand(string brand,string model)
+        {
+            var stream = new MemoryStream();
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(LotsStorage));
+            LotsStorage storage = new LotsStorage();
+            if (model is not null)
+            {
+                 storage = LotsStorage.GenerateByModel(brand,model);
+
+            }
+            else
+            {
+                 storage = LotsStorage.GenerateByBrand(brand);
+            }
+            serializer.WriteObject(stream, storage);
+            stream.Position = 0;
+            return Ok(stream);
+        }
+
     }
 }
