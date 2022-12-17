@@ -12,11 +12,12 @@ namespace SlSCarsServerStub.Controllers
             //TODO: return from db
             try
             {
-                return Ok(Convert.ToDateTime(calculator.date));
+                var rand = new Random();
+                return Ok(rand.NextDouble() * rand.Next());
             }
             catch (Exception)
             {
-                return BadRequest(); 
+                return BadRequest();
             }
         }
     }

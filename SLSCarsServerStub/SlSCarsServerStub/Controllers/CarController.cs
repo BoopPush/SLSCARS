@@ -44,7 +44,7 @@ namespace SlSCarsServerStub.Controllers
             var stream = new MemoryStream();
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(LotsStorage));
             LotsStorage storage = new LotsStorage();
-            if (model is not null)
+            if (model is not null && brand is not null)
             {
                  storage = LotsStorage.GenerateByModel(brand,model);
 
