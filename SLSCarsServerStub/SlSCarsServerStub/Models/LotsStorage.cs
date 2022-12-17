@@ -56,7 +56,7 @@ namespace SlSCarsServerStub.Models
                 {
                     Mileage = rand_.Next(1000000),
                     Bid = rand_.NextDouble() * rand_.Next(100000),
-                    SaleDate = DateTime.Now,
+                    SaleDate = DateTime.Today.ToString(),
                     Auction = AuctionArr[rand_.Next(AuctionArr.Length)],
                     Condition = ConditionArr[rand_.Next(ConditionArr.Length)],
                     PrimaryDamage = DamageArr[rand_.Next(DamageArr.Length)],
@@ -87,7 +87,7 @@ namespace SlSCarsServerStub.Models
             {
                 Mileage = rand_.Next(1000000),
                 Bid = rand_.NextDouble() * rand_.Next(100000),
-                SaleDate = DateTime.Now,
+                SaleDate = DateTime.Today.ToString(),
                 Auction = AuctionArr[rand_.Next(AuctionArr.Length)],
                 Condition = ConditionArr[rand_.Next(ConditionArr.Length)],
                 PrimaryDamage = DamageArr[rand_.Next(DamageArr.Length)],
@@ -117,7 +117,7 @@ namespace SlSCarsServerStub.Models
                 {
                     Mileage = rand_.Next(1000000),
                     Bid = rand_.NextDouble() * rand_.Next(100000),
-                    SaleDate = DateTime.Now,
+                    SaleDate = DateTime.Today.ToString(),
                     Auction = AuctionArr[rand_.Next(AuctionArr.Length)],
                     Condition = ConditionArr[rand_.Next(ConditionArr.Length)],
                     PrimaryDamage = DamageArr[rand_.Next(DamageArr.Length)],
@@ -145,10 +145,10 @@ namespace SlSCarsServerStub.Models
             for (int r = 0; r < 5; r++)
             {
                 var lot = new LotData()
-                {
+                { 
                     Mileage = rand_.Next(1000000),
                     Bid = rand_.NextDouble() * rand_.Next(100000),
-                    SaleDate = DateTime.Now,
+                    SaleDate = DateTime.Today.ToString(),
                     Auction = AuctionArr[rand_.Next(AuctionArr.Length)],
                     Condition = ConditionArr[rand_.Next(ConditionArr.Length)],
                     PrimaryDamage = DamageArr[rand_.Next(DamageArr.Length)],
@@ -226,7 +226,7 @@ namespace SlSCarsServerStub.Models
         public double Bid;
 
         [DataMember(Name = "saledate")]
-        public DateTime SaleDate;
+        public string SaleDate;
 
         [DataMember(Name = "note")]
         public string Note;

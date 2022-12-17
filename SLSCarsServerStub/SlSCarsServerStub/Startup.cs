@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SlSCarsServerStub.Common;
+using System;
 using System.Configuration;
 using System.Data.SqlClient;
 
@@ -8,6 +9,10 @@ namespace SlSCarsServerStub
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc(options =>
+            {
+                options.InputFormatters.Insert(0, new RawJsonBodyInputFormatter());
+            });
             services.AddControllers();
             services.AddCors();
         }
