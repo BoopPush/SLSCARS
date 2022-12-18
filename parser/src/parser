@@ -1,12 +1,31 @@
 #!/usr/bin/env python3.11
 from cars import get_car_data
-from utils import save_car_data
+from utils import save_car_data, DBCarDataStorage
 
 
 def main():
     car_data = get_car_data()
-    save_car_data()
+    print(car_data)
+    # db_storage = DBCarDataStorage('SLS')
+    # conditions_id = save_car_data(car_data['conditions'], db_storage)
+    # auction_id = save_car_data(car_data['auction'], db_storage)
+    # note_id = save_car_data(car_data['note'], db_storage)
+    # spec_id = save_car_data(car_data['spec'], db_storage)
+    # image_id = save_car_data(car_data['image'], db_storage)
+    # brand_id = save_car_data(car_data['brands'], db_storage)
+    # model_id = save_car_data(car_data['models'].update({'BrandID': brand_id}), db_storage)
+    # lots = car_data.update({'ConditionsID': conditions_id, 'AuctionID': auction_id, 'NoteID': note_id,
+    #                            'SpecID': spec_id, 'ImageID': image_id, 'ModelID': model_id})
+    # save_car_data(lots, db_storage)
+    # return lots_id
 
+# condition, auction, note, spec, image
+
+
+# def get_foreign_data(data, **kwargs):
+#     for k, v in kwargs:
+#         data[k] = v
+#     return data
 
 if __name__ == '__main__':
     main()

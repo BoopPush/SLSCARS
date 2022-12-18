@@ -8,16 +8,16 @@ from connection import _get_session
 
 def get_car_data():
     """Requests cars data from bidfax.info and returns it."""
-    bidfax_response = _get_bidfax_response()
-    car_data = _parse_car_data(bidfax_response)
+    bidfax_response = get_bidfax_response()
+    car_data = parse_car_data(bidfax_response)
     return car_data
 
 
-def _get_bidfax_response():
+def get_bidfax_response():
     return _get_session().get('https://bidfax.info/')
 
 
-def _parse_car_data(bidfax_response):
+def parse_car_data(bidfax_response):
     brand_data = _parse_brand_data(bidfax_response)
     brand_pages = _get_brand_pages(brand_data)
     car_urls = _get_list_car_urls(brand_pages)
@@ -78,4 +78,23 @@ def _parse_detail_car_data(detail_car_data):
     car_info = {info.text.split(':')[0]: info.text.split(':')[1].strip().replace(u'\xa0', u' ') for info in
                 soup.find('div', id='aside').find_all('p')
                 if not re.match('Цена ремонта', info.text)}
+    car_info.update(_get_image(soup))
+    car_info.update(_get_brand_and_model_name(soup))
+    car_info.update(_get_car_price(soup))
     return car_info
+
+
+def _get_image(soup: BeautifulSoup) -> dict:
+    print(soup)
+    img_url = soup.find('div', class_='col-xs-12 col-md-12').find('div', class_='full-screens').find('img').get('src')
+    return {'image': img_url}
+
+
+def _get_brand_and_model_name(soup: BeautifulSoup) -> dict:
+    brand = soup.find_all('div', class_='demo')[0].find('span').text
+    model = soup.find_all('div', class_='demo')[1].find('span').text
+    return {'BrandName': brand, 'ModelName': model}
+
+
+def _get_car_price(soup: BeautifulSoup) -> dict:
+    return {'BID': soup.find('div', class_='bidfax-price').find('span').text}
