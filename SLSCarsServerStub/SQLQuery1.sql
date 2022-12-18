@@ -77,17 +77,22 @@ create table EngineCapacities(
      EngineCapacity float not null,
 )
 
+create table Engines(
+    ID int identity primary key not null,
+    Capacity int not null,
+    Fuel nvarchar(100) not null,
+);
+
 create table Calculator(
     ID int not null,
-    AegAuto date not null,
+    Age int not null,
     Coast float not null,
-    EngineCapacityID int,
-    FuelTypeID int,
-    FOREIGN KEY (EngineCapacityID) REFERENCES EngineCapacities (ID) ON DELETE CASCADE,
-    FOREIGN KEY (FuelTypeID) REFERENCES FuelTypes (ID) ON DELETE CASCADE,
+    EngineID int not null,
+    FOREIGN KEY (EngineID) REFERENCES Engines (ID) ON DELETE CASCADE,
 );
 
 
 
-
-
+drop table calculator
+drop table enginecapacities
+drop table fueltypes
