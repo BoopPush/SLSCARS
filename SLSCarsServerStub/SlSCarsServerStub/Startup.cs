@@ -9,10 +9,17 @@ namespace SlSCarsServerStub
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            IConfiguration configuration = builder.Build();
+            //var conn = configuration.GetConnectionString("sls");
+            //var ctx = new SqlConnection(conn);
+            //ctx.Open();
             services.AddMvc(options =>
-            {
-                options.InputFormatters.Insert(0, new RawJsonBodyInputFormatter());
-            });
+        {
+            options.InputFormatters.Insert(0, new RawJsonBodyInputFormatter());
+        });
             services.AddControllers();
             services.AddCors();
         }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿    using Microsoft.AspNetCore.Mvc;
 using SlSCarsServerStub.Common;
 using SlSCarsServerStub.Models;
 using System.Runtime.Serialization.Json;
