@@ -54,7 +54,14 @@ namespace SlSCarsServerStub.Models
             var storage = new LotsStorage();
             var ctx = new SqlConnection(ConnectionString);
             ctx.Open();
-            var command = new SqlCommand("select * from Lots", ctx);
+            var command = new SqlCommand(@$"select * from Lots
+    join Models on Lots.ModelID = Models.ID
+    join Brands on Models.BrandID = Brands.ID
+    join Auctions on Auctions.ID = Lots.AuctionID
+    join Conditions on Conditions.ID = Lots.ConditionsID
+    join Images on Images.ID = Lots.ImageID
+    join Specs on Specs.ID = Lots.SpecID
+    join Notes on Notes.ID = Lots.NoteID", ctx);
             var reader = command.ExecuteReader();
             while (reader.Read())
             {
@@ -64,62 +71,21 @@ namespace SlSCarsServerStub.Models
                 lot.VIN = (string)reader.GetValue(3);
                 lot.SaleDate = (string)reader.GetValue(4);
                 lot.Year = Convert.ToInt32((string)reader.GetValue(5));
-                lot.Bid = Convert.ToInt32((double)reader.GetValue(6));
-
-                int modelID = (int)reader.GetValue(7);
-                var modelCommand = new SqlCommand($"select * from Models where ID = {modelID}", ctx);
-                var modelReader = modelCommand.ExecuteReader();
-                modelReader.Read();
-                var model = (string)modelReader.GetValue(1);
-
-                
-                //var brandID = (int)modelReader.GetValue(2);
-                //var brandCommand = new SqlCommand($"select * from Brands where ID = {brandID}", ctx);
-                //var brandReader = brandCommand.ExecuteReader();
-                //brandReader.Read();
-                //var brand = (string)brandReader.GetValue(1);
-
-                lot.Model =  model;
-
-                var condidtionID = (int)reader.GetValue(7);
-                var conditionCommand = new SqlCommand($"select * from Conditions where ID = {condidtionID}", ctx);
-                var conditionReader = conditionCommand.ExecuteReader();
-                conditionReader.Read();
-                lot.PrimaryDamage = (string)conditionReader.GetValue(1);
-                lot.SecondaryDamage = (string)conditionReader.GetValue(2);
-                lot.Condition = (string)conditionReader.GetValue(3);
-
-                var auctionID = (int)reader.GetValue(8);
-                var auctionCommand = new SqlCommand($"select * from Auctions where ID = {auctionID}", ctx);
-                var auctionReader = auctionCommand.ExecuteReader();
-                auctionReader.Read();
-                lot.Auction = (string)auctionReader.GetValue(1);
-                lot.Docs = (string)auctionReader.GetValue(2);
-                lot.Location = (string)auctionReader.GetValue(3);
-                lot.Seller = (string)auctionReader.GetValue(4);
-
-                var noteID = (int)reader.GetValue(9);
-                var noteCommand = new SqlCommand($"select * from Notes where ID = {noteID}", ctx);
-                var noteReader = noteCommand.ExecuteReader();
-                noteReader.Read();
-                lot.Note = (string)noteReader.GetValue(1);
-
-
-                var specID = (int)reader.GetValue(10);
-                var specCommand = new SqlCommand($"select * from Specs where ID = {specID}", ctx);
-                var specReader = specCommand.ExecuteReader();
-                specReader.Read();
-                lot.Transmission = (string)specReader.GetValue(1);
-                lot.Drive = (string)specReader.GetValue(2);
-                lot.Engine = (string)specReader.GetValue(3);
-                lot.Fuel = (string)specReader.GetValue(4);
-
-                var imgID = (int)reader.GetValue(11);
-                var imgCommand = new SqlCommand($"select * from Images where ID ={imgID}",ctx);
-                var imgReader = imgCommand.ExecuteReader();
-                imgReader.Read();
-
-                lot.Image = (string)imgReader.GetValue(1);
+                lot.Bid = (double)reader.GetValue(6);
+                lot.Model = (string)reader.GetValue(17) + " " + (string)reader.GetValue(14);
+                lot.Auction = (string)reader.GetValue(19);
+                lot.Docs = (string)reader.GetValue(20);
+                lot.Location = (string)reader.GetValue(21);
+                lot.Seller = (string)reader.GetValue(22);
+                lot.PrimaryDamage = (string)reader.GetValue(24);
+                lot.SecondaryDamage = (string)reader.GetValue(25);
+                lot.Condition = (string)reader.GetValue(26);
+                lot.Image = (string)reader.GetValue(28);
+                lot.Transmission = (string)reader.GetValue(30);
+                lot.Drive = (string)reader.GetValue(31);
+                lot.Engine = (string)reader.GetValue(32);
+                lot.Fuel = (string)reader.GetValue(33);
+                lot.Note = (string)reader.GetValue(35);
 
                 storage.Lots.Add(lot);
             }
@@ -133,81 +99,67 @@ namespace SlSCarsServerStub.Models
             var storage = new LotsStorage();
             var ctx = new SqlConnection(ConnectionString);
             ctx.Open();
-            var command = new SqlCommand($"select * from Lots where VIN = '{vin}'", ctx);
+            var command = new SqlCommand(@$"select * from Lots
+    join Models on Lots.ModelID = Models.ID
+    join Brands on Models.BrandID = Brands.ID
+    join Auctions on Auctions.ID = Lots.AuctionID
+    join Conditions on Conditions.ID = Lots.ConditionsID
+    join Images on Images.ID = Lots.ImageID
+    join Specs on Specs.ID = Lots.SpecID
+    join Notes on Notes.ID = Lots.NoteID where Lots.VIN = '{vin}'", ctx);
             var reader = command.ExecuteReader();
-            if (!reader.HasRows)
-            {
-                return new LotsStorage();
-            }
             reader.Read();
-            
                 var lot = new LotData();
                 lot.Color = (string)reader.GetValue(1);
                 lot.Mileage = (int)reader.GetValue(2);
-                lot.VIN = vin;
+                lot.VIN = (string)reader.GetValue(3);
                 lot.SaleDate = (string)reader.GetValue(4);
                 lot.Year = Convert.ToInt32((string)reader.GetValue(5));
-                lot.Bid = Convert.ToInt32((double)reader.GetValue(6));
-
-                int modelID = (int)reader.GetValue(7);
-                var modelCommand = new SqlCommand($"select * from Models where ID = {modelID}", ctx);
-                var modelReader = modelCommand.ExecuteReader();
-                modelReader.Read();
-                var model = (string)modelReader.GetValue(1);
-
-
-                //var brandID = (int)modelReader.GetValue(2);
-                //var brandCommand = new SqlCommand($"select * from Brands where ID = {brandID}", ctx);
-                //var brandReader = brandCommand.ExecuteReader();
-                //brandReader.Read();
-                //var brand = (string)brandReader.GetValue(1);
-
-                lot.Model = model;
-
-                var condidtionID = (int)reader.GetValue(7);
-                var conditionCommand = new SqlCommand($"select * from Conditions where ID = {condidtionID}", ctx);
-                var conditionReader = conditionCommand.ExecuteReader();
-                conditionReader.Read();
-                lot.PrimaryDamage = (string)conditionReader.GetValue(1);
-                lot.SecondaryDamage = (string)conditionReader.GetValue(2);
-                lot.Condition = (string)conditionReader.GetValue(3);
-
-                var auctionID = (int)reader.GetValue(8);
-                var auctionCommand = new SqlCommand($"select * from Auctions where ID = {auctionID}", ctx);
-                var auctionReader = auctionCommand.ExecuteReader();
-                auctionReader.Read();
-                lot.Auction = (string)auctionReader.GetValue(1);
-                lot.Docs = (string)auctionReader.GetValue(2);
-                lot.Location = (string)auctionReader.GetValue(3);
-                lot.Seller = (string)auctionReader.GetValue(4);
-
-                var noteID = (int)reader.GetValue(9);
-                var noteCommand = new SqlCommand($"select * from Notes where ID = {noteID}", ctx);
-                var noteReader = noteCommand.ExecuteReader();
-                noteReader.Read();
-                lot.Note = (string)noteReader.GetValue(1);
-
-
-                var specID = (int)reader.GetValue(10);
-                var specCommand = new SqlCommand($"select * from Specs where ID = {specID}", ctx);
-                var specReader = specCommand.ExecuteReader();
-                specReader.Read();
-                lot.Transmission = (string)specReader.GetValue(1);
-                lot.Drive = (string)specReader.GetValue(2);
-                lot.Engine = (string)specReader.GetValue(3);
-                lot.Fuel = (string)specReader.GetValue(4);
-
-                var imgID = (int)reader.GetValue(11);
-                var imgCommand = new SqlCommand($"select * from Images where ID ={imgID}", ctx);
-                var imgReader = imgCommand.ExecuteReader();
-                imgReader.Read();
-
-                lot.Image = (string)imgReader.GetValue(1);
+                lot.Bid = (double)reader.GetValue(6);
+                lot.Model = (string)reader.GetValue(17) + " " + (string)reader.GetValue(14);
+                lot.Auction = (string)reader.GetValue(19);
+                lot.Docs = (string)reader.GetValue(20);
+                lot.Location = (string)reader.GetValue(21);
+                lot.Seller = (string)reader.GetValue(22);
+                lot.PrimaryDamage = (string)reader.GetValue(24);
+                lot.SecondaryDamage = (string)reader.GetValue(25);
+                lot.Condition = (string)reader.GetValue(26);
+                lot.Image = (string)reader.GetValue(28);
+                lot.Transmission = (string)reader.GetValue(30);
+                lot.Drive = (string)reader.GetValue(31);
+                lot.Engine = (string)reader.GetValue(32);
+                lot.Fuel = (string)reader.GetValue(33);
+                lot.Note = (string)reader.GetValue(35);
 
                 storage.Lots.Add(lot);
 
             ctx.Close();
             return storage;
+        }
+
+        private static void Test()
+        {
+
+            var storage = new LotsStorage();
+            var ctx = new SqlConnection(ConnectionString);
+            ctx.Open();
+            var command = new SqlCommand(@$"select * from Lots
+    join Models on Lots.ModelID = Models.ID
+    join Brands on Models.BrandID = Brands.ID
+    join Auctions on Auctions.ID = Lots.AuctionID
+    join Conditions on Conditions.ID = Lots.ConditionsID
+    join Images on Images.ID = Lots.ImageID
+    join Specs on Specs.ID = Lots.SpecID
+    join Notes on Notes.ID = Lots.NoteID", ctx);
+            var reader = command.ExecuteReader();
+            if (!reader.HasRows)
+            {
+            }
+
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(20);
+            }
         }
 
         public static LotsStorage GenerateByBrand(string brand)
@@ -216,13 +168,15 @@ namespace SlSCarsServerStub.Models
             var storage = new LotsStorage();
             var ctx = new SqlConnection(ConnectionString);
             ctx.Open();
-            var command = new SqlCommand($"select * from Lots join Models on Lots.ModelID = Models.ID join Brands on Models.BrandID = Brands.ID where Brands.BrandName = '{brand}'", ctx);
+            var command = new SqlCommand(@$"select * from Lots
+    join Models on Lots.ModelID = Models.ID
+    join Brands on Models.BrandID = Brands.ID
+    join Auctions on Auctions.ID = Lots.AuctionID
+    join Conditions on Conditions.ID = Lots.ConditionsID
+    join Images on Images.ID = Lots.ImageID
+    join Specs on Specs.ID = Lots.SpecID
+    join Notes on Notes.ID = Lots.NoteID where Brands.BrandName = '{brand}'", ctx);
             var reader = command.ExecuteReader();
-            if (!reader.HasRows)
-            {
-                return new LotsStorage();
-            }
-
             while (reader.Read())
             {
                 var lot = new LotData();
@@ -231,84 +185,43 @@ namespace SlSCarsServerStub.Models
                 lot.VIN = (string)reader.GetValue(3);
                 lot.SaleDate = (string)reader.GetValue(4);
                 lot.Year = Convert.ToInt32((string)reader.GetValue(5));
-                lot.Bid = Convert.ToInt32((double)reader.GetValue(6));
-
-                int modelID = (int)reader.GetValue(7);
-                var modelCommand = new SqlCommand($"select * from Models where ID = {modelID}", ctx);
-                var modelReader = modelCommand.ExecuteReader();
-                modelReader.Read();
-                var model = (string)modelReader.GetValue(1);
-
-
-                //var brandID = (int)modelReader.GetValue(2);
-                //var brandCommand = new SqlCommand($"select * from Brands where ID = {brandID}", ctx);
-                //var brandReader = brandCommand.ExecuteReader();
-                //brandReader.Read();
-                //var brand = (string)brandReader.GetValue(1);
-
-                lot.Model = model;
-
-                var condidtionID = (int)reader.GetValue(7);
-                var conditionCommand = new SqlCommand($"select * from Conditions where ID = {condidtionID}", ctx);
-                var conditionReader = conditionCommand.ExecuteReader();
-                conditionReader.Read();
-                lot.PrimaryDamage = (string)conditionReader.GetValue(1);
-                lot.SecondaryDamage = (string)conditionReader.GetValue(2);
-                lot.Condition = (string)conditionReader.GetValue(3);
-
-                var auctionID = (int)reader.GetValue(8);
-                var auctionCommand = new SqlCommand($"select * from Auctions where ID = {auctionID}", ctx);
-                var auctionReader = auctionCommand.ExecuteReader();
-                auctionReader.Read();
-                lot.Auction = (string)auctionReader.GetValue(1);
-                lot.Docs = (string)auctionReader.GetValue(2);
-                lot.Location = (string)auctionReader.GetValue(3);
-                lot.Seller = (string)auctionReader.GetValue(4);
-
-                var noteID = (int)reader.GetValue(9);
-                var noteCommand = new SqlCommand($"select * from Notes where ID = {noteID}", ctx);
-                var noteReader = noteCommand.ExecuteReader();
-                noteReader.Read();
-                lot.Note = (string)noteReader.GetValue(1);
-
-
-                var specID = (int)reader.GetValue(10);
-                var specCommand = new SqlCommand($"select * from Specs where ID = {specID}", ctx);
-                var specReader = specCommand.ExecuteReader();
-                specReader.Read();
-                lot.Transmission = (string)specReader.GetValue(1);
-                lot.Drive = (string)specReader.GetValue(2);
-                lot.Engine = (string)specReader.GetValue(3);
-                lot.Fuel = (string)specReader.GetValue(4);
-
-                var imgID = (int)reader.GetValue(11);
-                var imgCommand = new SqlCommand($"select * from Images where ID ={imgID}", ctx);
-                var imgReader = imgCommand.ExecuteReader();
-                imgReader.Read();
-
-                lot.Image = (string)imgReader.GetValue(1);
+                lot.Bid = (double)reader.GetValue(6);
+                lot.Model = (string)reader.GetValue(17) + " " + (string)reader.GetValue(14);
+                lot.Auction = (string)reader.GetValue(19);
+                lot.Docs = (string)reader.GetValue(20);
+                lot.Location = (string)reader.GetValue(21);
+                lot.Seller = (string)reader.GetValue(22);
+                lot.PrimaryDamage = (string)reader.GetValue(24);
+                lot.SecondaryDamage = (string)reader.GetValue(25);
+                lot.Condition = (string)reader.GetValue(26);
+                lot.Image = (string)reader.GetValue(28);
+                lot.Transmission = (string)reader.GetValue(30);
+                lot.Drive = (string)reader.GetValue(31);
+                lot.Engine = (string)reader.GetValue(32);
+                lot.Fuel = (string)reader.GetValue(33);
+                lot.Note = (string)reader.GetValue(35);
 
                 storage.Lots.Add(lot);
             }
-
-            
-
             ctx.Close();
             return storage;
         }
+
 
         public static LotsStorage GenerateByModel(string brand,string model)
         {
             var storage = new LotsStorage();
             var ctx = new SqlConnection(ConnectionString);
             ctx.Open();
-            var command = new SqlCommand($"select * from Lots join Models on Lots.ModelID = Models.ID where Models.ModelName = '{model}'", ctx);
+            var command = new SqlCommand(@$"select * from Lots
+    join Models on Lots.ModelID = Models.ID
+    join Brands on Models.BrandID = Brands.ID
+    join Auctions on Auctions.ID = Lots.AuctionID
+    join Conditions on Conditions.ID = Lots.ConditionsID
+    join Images on Images.ID = Lots.ImageID
+    join Specs on Specs.ID = Lots.SpecID
+    join Notes on Notes.ID = Lots.NoteID where Models.ModelName= '{model}'", ctx);
             var reader = command.ExecuteReader();
-            if (!reader.HasRows)
-            {
-                return new LotsStorage();
-            }
-
             while (reader.Read())
             {
                 var lot = new LotData();
@@ -317,66 +230,24 @@ namespace SlSCarsServerStub.Models
                 lot.VIN = (string)reader.GetValue(3);
                 lot.SaleDate = (string)reader.GetValue(4);
                 lot.Year = Convert.ToInt32((string)reader.GetValue(5));
-                lot.Bid = Convert.ToInt32((double)reader.GetValue(6));
-
-                int modelID = (int)reader.GetValue(7);
-                var modelCommand = new SqlCommand($"select * from Models where ID = {modelID}", ctx);
-                var modelReader = modelCommand.ExecuteReader();
-                modelReader.Read();
-
-                //var brandID = (int)modelReader.GetValue(2);
-                //var brandCommand = new SqlCommand($"select * from Brands where ID = {brandID}", ctx);
-                //var brandReader = brandCommand.ExecuteReader();
-                //brandReader.Read();
-                //var brand = (string)brandReader.GetValue(1);
-
-                lot.Model = model;
-
-                var condidtionID = (int)reader.GetValue(7);
-                var conditionCommand = new SqlCommand($"select * from Conditions where ID = {condidtionID}", ctx);
-                var conditionReader = conditionCommand.ExecuteReader();
-                conditionReader.Read();
-                lot.PrimaryDamage = (string)conditionReader.GetValue(1);
-                lot.SecondaryDamage = (string)conditionReader.GetValue(2);
-                lot.Condition = (string)conditionReader.GetValue(3);
-
-                var auctionID = (int)reader.GetValue(8);
-                var auctionCommand = new SqlCommand($"select * from Auctions where ID = {auctionID}", ctx);
-                var auctionReader = auctionCommand.ExecuteReader();
-                auctionReader.Read();
-                lot.Auction = (string)auctionReader.GetValue(1);
-                lot.Docs = (string)auctionReader.GetValue(2);
-                lot.Location = (string)auctionReader.GetValue(3);
-                lot.Seller = (string)auctionReader.GetValue(4);
-
-                var noteID = (int)reader.GetValue(9);
-                var noteCommand = new SqlCommand($"select * from Notes where ID = {noteID}", ctx);
-                var noteReader = noteCommand.ExecuteReader();
-                noteReader.Read();
-                lot.Note = (string)noteReader.GetValue(1);
-
-
-                var specID = (int)reader.GetValue(10);
-                var specCommand = new SqlCommand($"select * from Specs where ID = {specID}", ctx);
-                var specReader = specCommand.ExecuteReader();
-                specReader.Read();
-                lot.Transmission = (string)specReader.GetValue(1);
-                lot.Drive = (string)specReader.GetValue(2);
-                lot.Engine = (string)specReader.GetValue(3);
-                lot.Fuel = (string)specReader.GetValue(4);
-
-                var imgID = (int)reader.GetValue(11);
-                var imgCommand = new SqlCommand($"select * from Images where ID ={imgID}", ctx);
-                var imgReader = imgCommand.ExecuteReader();
-                imgReader.Read();
-
-                lot.Image = (string)imgReader.GetValue(1);
+                lot.Bid = (double)reader.GetValue(6);
+                lot.Model = (string)reader.GetValue(17) + " " + (string)reader.GetValue(14);
+                lot.Auction = (string)reader.GetValue(19);
+                lot.Docs = (string)reader.GetValue(20);
+                lot.Location = (string)reader.GetValue(21);
+                lot.Seller = (string)reader.GetValue(22);
+                lot.PrimaryDamage = (string)reader.GetValue(24);
+                lot.SecondaryDamage = (string)reader.GetValue(25);
+                lot.Condition = (string)reader.GetValue(26);
+                lot.Image = (string)reader.GetValue(28);
+                lot.Transmission = (string)reader.GetValue(30);
+                lot.Drive = (string)reader.GetValue(31);
+                lot.Engine = (string)reader.GetValue(32);
+                lot.Fuel = (string)reader.GetValue(33);
+                lot.Note = (string)reader.GetValue(35);
 
                 storage.Lots.Add(lot);
             }
-
-            
-
             ctx.Close();
             return storage;
         }
