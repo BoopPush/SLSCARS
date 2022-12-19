@@ -41,7 +41,6 @@ namespace SlSCarsServerStub.Controllers
             {
                 return BadRequest();
             }
-// юзер не найден
         }
 
         [HttpPost("signup")]
@@ -73,6 +72,38 @@ namespace SlSCarsServerStub.Controllers
                 return BadRequest("invalid email");
             }
 
+        }
+
+        [HttpPost("premium")]
+        [TypeFilter(typeof(LogFilterAsync), IsReusable = true)]
+        public async Task<IActionResult> PostPremiumUser([FromBody] User user)
+        {
+            try
+            {
+                //TODO: add valid return
+                var conn = config_.GetConnectionString("sls");
+                string res = string.Empty;
+
+                using (var ctx = new SqlConnection(conn))
+                {
+                    ctx.Open();
+                    var command = new SqlCommand("select ID from Users", ctx);
+                    var reader = command.ExecuteReader();
+                    reader.Read();
+                    var id = reader.GetValue(0);
+                    var startPrem = DateTime.Today.ToString();
+                    var endPrem = DateTime.Today.AddYears(1).ToString();
+                    command = new SqlCommand($"insert into PremiumUsers values ({id},'{startPrem}','{endPrem}')", ctx);
+                    command.ExecuteNonQuery();
+                    ctx.Close();
+                }
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 
