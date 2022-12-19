@@ -1,16 +1,18 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-WORKDIR /SlSCarsServerStub
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /SLSCarsServerStub
 EXPOSE 1111
 
-# Copy everything
-COPY . ./
-# Restore as distinct layers
-RUN dotnet restore
-# Build and publish a release
-RUN dotnet publish -c Release -o out
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["SlSCarsServerStub.csproj", "./"]
+RUN dotnet restore "./SlSCarsServerStub.csproj"
+COPY . .
+RUN dotnet build "SlSCarsServerStub.csproj" -c Release -o /SLSCarsServerStub
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
-WORKDIR /SlSCarsServerStub
-COPY --from=build-env /SlSCarsServerStub/out .
+FROM build AS publish
+RUN dotnet publish "SlSCarsServerStub.csproj" -c Release -o /SLSCarsServerStub
+
+FROM base AS final
+WORKDIR /SLSCarsServerStub
+COPY --from=publish /SLSCarsServerStub .
 ENTRYPOINT ["dotnet", "SlSCarsServerStub.dll"]

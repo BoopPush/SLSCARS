@@ -8,7 +8,7 @@ namespace SlSCarsServerStub.Models
     public class LotsStorage
     {
 
-        private readonly static string ConnectionString = "Data Source=localhost;User ID=sa;Password=Testpass123;MultipleActiveResultSets=true";
+        private readonly static string ConnectionString = "Server=mssql_db;Database=master;User ID=sa;Password=Testpass123;MultipleActiveResultSets=true";
         private static readonly Random rand_ = new Random();
         #region Data
 

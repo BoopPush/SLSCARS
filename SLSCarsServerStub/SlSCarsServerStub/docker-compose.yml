@@ -1,6 +1,19 @@
 version: '3.8'
 
-services:  
+services:
+  sls:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+#    command: >
+#      sh -c "dotnet build"
+    ports:
+      - 1111:1111
+    volumes:
+      - ./:/SlSCarsServerStub
+    depends_on:
+      - db
+
   db:
     container_name: mssql_db
     image: mcr.microsoft.com/mssql/server:latest
@@ -12,3 +25,7 @@ services:
       - SA_PASSWORD=${SA_PASSWORD}
     volumes:
       - ./db:/var/opt/mssql/data
+
+
+volumes:
+  db:
