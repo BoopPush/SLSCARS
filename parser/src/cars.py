@@ -1,5 +1,6 @@
 import re
 import time
+from collections import OrderedDict
 
 from bs4 import BeautifulSoup
 
@@ -98,3 +99,19 @@ def _get_brand_and_model_name(soup: BeautifulSoup) -> dict:
 
 def _get_car_price(soup: BeautifulSoup) -> dict:
     return {'BID': soup.find('div', class_='bidfax-price').find('span').text}
+
+
+def _get_transformation_data(car_data: dict) -> dict:
+    lots = OrderedDict(
+        [('Color', car_data['Цвет кузова']), ('Mileage', car_data['Пробег'].split(' ')[0]), ('VIN', car_data['VIN']),
+         ('SaleDate', car_data['Дата продажи']), ('Age', car_data['Год выпуска']), ('Bid', car_data['BID'])])
+    conditions = OrderedDict(
+        [('PrimaryDamage', car_data['Основное повреждение']), ('SecondaryDamage', car_data['Второстепенное повреждение']),
+         ('Condition', car_data['Состояние'])]
+    )
+    image = OrderedDict([('FilePath', car_data['image'])])
+    note = OrderedDict([('Note', car_data['Примечание'])])
+    auction = OrderedDict([('AuctionName', car_data['Аукцион']), ('Documents', car_data['Документы']),
+                           ('Location', car_data['Место продажи']), ('Seller', car_data['Продавец'])])
+    spec = OrderedDict([('Transmission', car_data['Коробка передач'])])
+
