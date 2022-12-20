@@ -9,6 +9,10 @@ namespace SlSCarsServerStub
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -21,14 +25,13 @@ namespace SlSCarsServerStub
             options.InputFormatters.Insert(0, new RawJsonBodyInputFormatter());
         });
             services.AddControllers();
-            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app)
         {
             app.UseRouting();
 
-            app.UseCors(builder => builder.AllowAnyOrigin());
+            app.UseCors("ApiCorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {

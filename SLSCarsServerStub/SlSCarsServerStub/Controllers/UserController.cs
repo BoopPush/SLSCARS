@@ -13,7 +13,7 @@ namespace SlSCarsServerStub.Controllers
             config_ = configuration;
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         [TypeFilter(typeof(LogFilterAsync), IsReusable = true)]
         public async Task<IActionResult> GetUser([FromBody] User user)
         {
