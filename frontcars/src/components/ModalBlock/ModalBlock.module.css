@@ -1,0 +1,12 @@
+.invisible {
+	display: none;
+}
+
+.buttonCount {
+	width: 60%;
+	padding: 8px;
+	text-transform: uppercase;
+	color: #fff;
+	background-color: #1976d3;
+	border-radius: 10px;
+}
